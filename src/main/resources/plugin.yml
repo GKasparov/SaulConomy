@@ -1,0 +1,23 @@
+name: SaulConomy
+version: ${project.version}
+main: me.mazenz.saulconomy.SaulConomy
+api-version: 1.16
+authors: [ GKasparov ]
+description: Economy Plugin
+commands:
+  balance:
+    description: Shows user's balance
+  givemoney:
+    description: Adds money to a user's account
+permissions:
+  saulconomy.*:
+    description: All SaulConomy Perms
+    children:
+      saulconomy.givemoney: true
+    default: op
+  saulconomy.givemoney:
+    description: Permissions to give player's money
+    default: op
+
+
+
