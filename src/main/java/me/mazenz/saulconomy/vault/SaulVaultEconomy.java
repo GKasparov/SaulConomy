@@ -12,7 +12,7 @@ import java.util.List;
 
 public class SaulVaultEconomy implements BaseVaultImplementation {
 
-    private static final EconomyResponse NOT_IMPLEMENTED = new EconomyResponse(0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "Method not implemented");
+    private static final EconomyResponse NOT_IMPLEMENTED = new EconomyResponse(0, 0, EconomyResponse.ResponseType.NOT_IMPLEMENTED, "Not implemented");
 
     private final Database db;
 

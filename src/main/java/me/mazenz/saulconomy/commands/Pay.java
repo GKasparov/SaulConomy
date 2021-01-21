@@ -22,7 +22,7 @@ public class Pay implements CommandExecutor {
         if (args.length == 2) {
             if (sender instanceof Player) {
                 Player p = (Player) sender;
-                OfflinePlayer target = Bukkit.getPlayer(args[0]);
+                OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
 
                 if (target != null) {
                     if (Helper.isDouble(args[1])) {
@@ -31,6 +31,7 @@ public class Pay implements CommandExecutor {
                         if (economy.has(p, amount)) {
                             if (economy.withdrawPlayer(p, amount).type == EconomyResponse.ResponseType.SUCCESS) {
                                 economy.depositPlayer(target, amount);
+                                p.sendMessage("Transaction successful");
                             } else {
                                 p.sendMessage(ChatColor.RED + "Unable to process transaction");
                             }

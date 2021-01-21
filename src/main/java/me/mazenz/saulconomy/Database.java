@@ -1,5 +1,6 @@
 package me.mazenz.saulconomy;
 
+import org.bukkit.ChatColor;
 import org.intellij.lang.annotations.Language;
 
 import java.io.File;
@@ -74,7 +75,7 @@ public class Database {
     }
 
     public void report(SQLException exception) {
-        plugin.getLogger().log(Level.WARNING, "Unhandled exception: " + exception.getMessage(), exception);
+        plugin.getLogger().log(Level.SEVERE, ChatColor.RED + "Unhandled exception: " + exception.getMessage(), exception);
     }
 
     public interface Initializer {
