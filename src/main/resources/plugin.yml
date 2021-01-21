@@ -21,3 +21,4 @@ permissions:
     default: op
   saul.setbalance:
     description: Allows user to set others' balances
+    default: op

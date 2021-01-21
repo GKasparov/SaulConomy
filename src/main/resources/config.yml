@@ -1,3 +1,2 @@
-SQLite:
-  Filename:
-    economy: economy
+minimumPay: 0.01 #minimumPay is the lowest amount user's can pay others with the /pay command
+offlinePayments: true #Dictates whether players can pay others that are offline with the /pay command

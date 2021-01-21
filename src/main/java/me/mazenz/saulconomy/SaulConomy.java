@@ -29,7 +29,7 @@ public class SaulConomy extends JavaPlugin {
         // Commands
         getCommand("balance").setExecutor(new Balance(economy));
         getCommand("setbalance").setExecutor(new SetBalance(economy));
-        getCommand("pay").setExecutor(new Pay(economy));
+        getCommand("pay").setExecutor(new Pay(economy, this));
     }
 
     @Override
