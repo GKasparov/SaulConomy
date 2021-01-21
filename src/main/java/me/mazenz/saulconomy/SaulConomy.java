@@ -1,31 +1,39 @@
 package me.mazenz.saulconomy;
 
+import me.mazenz.saulconomy.commands.Balance;
+import me.mazenz.saulconomy.vault.SaulVaultEconomy;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.sql.SQLException;
 
 public class SaulConomy extends JavaPlugin {
 
     private Database db;
-    public static SaulConomy getInstance;
-    public static EconomyImplementer economyImplementer;
-    public static VaultHook vaultHook;
 
-    public void onEnable(){
+    public void onEnable() {
         getConfig().options().copyDefaults(true);
         saveConfig();
-        this.db = new SQLite(this);
+
+        this.db = new Database(this);
         this.db.load();
-        getCommand("balance").setExecutor(new Balance(db));
-        Bukkit.getPluginManager().registerEvents(new onjoin(db), this);
 
+        // Vault integration
+        SaulVaultEconomy economy = new SaulVaultEconomy(db);
+        Bukkit.getServicesManager().register(Economy.class, economy, this, ServicePriority.Normal);
+
+        // Commands
+        getCommand("balance").setExecutor(new Balance(economy));
     }
 
-    public Database getRDatabase() {
-        return this.db;
-    }
-    public void instanceClasses() {
-        getInstance = this;
-        economyImplementer  = new EconomyImplementer();
-        vaultHook = new VaultHook();
+    @Override
+    public void onDisable() {
+        try {
+            db.getConnection().close();
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
     }
 }

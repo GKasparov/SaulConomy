@@ -1,51 +1,81 @@
 package me.mazenz.saulconomy;
 
-import org.bukkit.OfflinePlayer;
+import org.intellij.lang.annotations.Language;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.File;
+import java.io.IOException;
+import java.sql.*;
 import java.util.logging.Level;
 
-public abstract class Database {
-    SaulConomy plugin;
-    Connection connection;
-    // The name of the table we created back in SQLite class.
-    public String table = "economy";
-    public int tokens = 0;
+public class Database {
+
+    private static final String SQLiteCreateTokensTable = "CREATE TABLE IF NOT EXISTS economy (" +
+            "`uuid` varchar(32) NOT NULL, `balance` double(1000) NOT NULL, PRIMARY KEY (`uuid`));";
+
+    private final SaulConomy plugin;
+    private Connection connection;
 
     public Database(SaulConomy instance) {
         plugin = instance;
     }
 
-    public abstract Connection getSQLConnection();
-
-    public abstract void load();
-
-    public void initialize() {
-        connection = getSQLConnection();
-    }
-
-    // These are the methods you can use to get things out of your database. You of course can make new ones to return different things in the database.
-    // This returns the number of people the player killed.
-    public double getBalance(OfflinePlayer player) {
-        Connection conn = getSQLConnection();
-
-        try (PreparedStatement ps = conn.prepareStatement("SELECT * FROM " + table + " WHERE uuid = ?;")) {
-            ps.setString(1, player.getUniqueId().toString());
-
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.getDouble("balance");
-            }
-        } catch (SQLException ex) {
-            plugin.getLogger().log(Level.SEVERE, "Couldn't execute MySQL statement", ex);
+    public Connection getConnection() {
+        if (!isClosed()) {
+            return connection;
         }
 
-        return 0.0;
+        File database = new File(plugin.getDataFolder(), "economy.db");
+
+        try {
+            database.getParentFile().mkdirs();
+            database.createNewFile();
+        } catch (IOException e) {
+            plugin.getLogger().log(Level.SEVERE, "File write error: economy.db");
+        }
+
+        try {
+            Class.forName("org.sqlite.JDBC");
+            return connection = DriverManager.getConnection("jdbc:sqlite:" + database);
+        } catch (ClassNotFoundException | SQLException ex) {
+            plugin.getLogger().log(Level.SEVERE, "SQLite exception on initialize", ex);
+        }
+
+        return null;
     }
 
-    public void setBalance(OfflinePlayer player, double balance) {
-        // TODO: make this work
+    public void load() {
+        connection = getConnection();
+
+        try (Statement s = connection.createStatement()) {
+            s.executeUpdate(SQLiteCreateTokensTable);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isClosed() {
+        if (connection == null) {
+            return true;
+        }
+
+        try {
+            return connection.isClosed();
+        } catch (SQLException exception) {
+            return false;
+        }
+    }
+
+    public PreparedStatement statement(@Language("SQLite") String query, Initializer initializer) throws SQLException {
+        PreparedStatement statement = getConnection().prepareStatement(query);
+        initializer.apply(statement);
+        return statement;
+    }
+
+    public ResultSet result(@Language("SQLite") String query, Initializer initializer) throws SQLException {
+        return statement(query, initializer).executeQuery();
+    }
+
+    public interface Initializer {
+        void apply(PreparedStatement s) throws SQLException;
     }
 }
