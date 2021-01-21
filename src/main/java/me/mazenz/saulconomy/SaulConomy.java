@@ -1,50 +1,31 @@
 package me.mazenz.saulconomy;
 
-import java.sql.*;
-
-import org.bukkit.event.Listener;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import java.util.HashMap;
-import java.util.UUID;
 
 public class SaulConomy extends JavaPlugin {
 
+    private Database db;
     public static SaulConomy getInstance;
-    public EconomyImplementer economyImplementer;
-    private VaultHook vaultHook;
-    public final HashMap<UUID, Double> playerBank = new HashMap<>();
+    public static EconomyImplementer economyImplementer;
+    public static VaultHook vaultHook;
 
-    public void onEnable() {
-        runOnEnable();
+    public void onEnable(){
         getConfig().options().copyDefaults(true);
         saveConfig();
-        try {
-            sql.connect();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        getServer().getPluginManager().registerEvents(new joinevent(), this);
+        this.db = new SQLite(this);
+        this.db.load();
+        getCommand("balance").setExecutor(new Balance(db));
+        Bukkit.getPluginManager().registerEvents(new onjoin(db), this);
+
     }
 
-    private void instanceClasses() {
+    public Database getRDatabase() {
+        return this.db;
+    }
+    public void instanceClasses() {
         getInstance = this;
-        economyImplementer = new EconomyImplementer();
+        economyImplementer  = new EconomyImplementer();
         vaultHook = new VaultHook();
-    }
-
-    public void runOnEnable() {
-        instanceClasses();
-        vaultHook.hook();
-        this.getCommand("balance").setExecutor(new balance());
-        this.getCommand("givemoney").setExecutor(new givemoney());
-    }
-
-    public void onDisable() {
-        vaultHook.unhook();
-        sql.disconnect();
-    }
-
-    public HashMap<UUID, Double> getBalanceMap() {
-        return playerBank;
     }
 }

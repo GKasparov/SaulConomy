@@ -1,5 +1,3 @@
-host: localhost
-port: 3306
-database: saul
-username: root
-password: Owner123
+SQLite:
+  Filename:
+    economy: economy

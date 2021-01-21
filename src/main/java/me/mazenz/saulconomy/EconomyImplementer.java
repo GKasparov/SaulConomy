@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class EconomyImplementer implements Economy {
 
-    private SaulConomy plugin = SaulConomy.getInstance;
+    public SaulConomy plugin = SaulConomy.getInstance;
 
     @Override
     public boolean isEnabled() {
@@ -73,30 +73,31 @@ public class EconomyImplementer implements Economy {
     public double getBalance(String s) {
         Player p = Bukkit.getPlayer(s);
         UUID uuid = p.getUniqueId();
-        return plugin.playerBank.get(uuid);
+        return 0;
     }
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer) {
         UUID uuid = offlinePlayer.getUniqueId();
-        return plugin.playerBank.get(uuid);
+        return 0;
     }
 
     @Override
     public double getBalance(String s, String s1) {
         Player p = Bukkit.getPlayer(s);
         UUID uuid = p.getUniqueId();
-        return plugin.playerBank.get(uuid);
+        return 0;
     }
 
     @Override
     public double getBalance(OfflinePlayer offlinePlayer, String s) {
         UUID uuid = offlinePlayer.getUniqueId();
-        return plugin.playerBank.get(uuid);
+        return 0;
     }
 
     @Override
     public boolean has(String s, double v) {
+
         return false;
     }
 
@@ -139,16 +140,12 @@ public class EconomyImplementer implements Economy {
     public EconomyResponse depositPlayer(String s, double v) {
         Player p = Bukkit.getPlayer(s);
         UUID uuid = p.getUniqueId();
-        double oldBalance = plugin.playerBank.get(uuid);
-        plugin.playerBank.put(uuid, oldBalance + v);
         return null;
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double v) {
         UUID uuid = offlinePlayer.getUniqueId();
-        double oldBalance = plugin.playerBank.get(uuid);
-        plugin.playerBank.put(uuid, oldBalance + v);
         return null;
     }
 
@@ -156,16 +153,12 @@ public class EconomyImplementer implements Economy {
     public EconomyResponse depositPlayer(String s, String s1, double v) {
         Player p = Bukkit.getPlayer(s);
         UUID uuid = p.getUniqueId();
-        double oldBalance = plugin.playerBank.get(uuid);
-        plugin.playerBank.put(uuid, oldBalance + v);
         return null;
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, String s, double v) {
         UUID uuid = offlinePlayer.getUniqueId();
-        double oldBalance = plugin.playerBank.get(uuid);
-        plugin.playerBank.put(uuid, oldBalance + v);
         return null;
     }
 
