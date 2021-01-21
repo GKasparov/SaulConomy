@@ -9,9 +9,6 @@ import java.util.logging.Level;
 
 public class Database {
 
-    private static final String SQLiteCreateTokensTable = "CREATE TABLE IF NOT EXISTS economy (" +
-            "`uuid` varchar(32) NOT NULL, `balance` double(1000) NOT NULL, PRIMARY KEY (`uuid`));";
-
     private final SaulConomy plugin;
     private Connection connection;
 
@@ -20,7 +17,7 @@ public class Database {
     }
 
     public Connection getConnection() {
-        if (!isClosed()) {
+        if (isOpen()) {
             return connection;
         }
 
@@ -47,19 +44,20 @@ public class Database {
         connection = getConnection();
 
         try (Statement s = connection.createStatement()) {
-            s.executeUpdate(SQLiteCreateTokensTable);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            s.executeUpdate("CREATE TABLE IF NOT EXISTS economy (" +
+                    "`uuid` varchar(32) NOT NULL, `balance` double(1000) NOT NULL, PRIMARY KEY (`uuid`));");
+        } catch (SQLException exception) {
+            report(exception);
         }
     }
 
-    public boolean isClosed() {
+    public boolean isOpen() {
         if (connection == null) {
-            return true;
+            return false;
         }
 
         try {
-            return connection.isClosed();
+            return !connection.isClosed();
         } catch (SQLException exception) {
             return false;
         }
@@ -73,6 +71,10 @@ public class Database {
 
     public ResultSet result(@Language("SQLite") String query, Initializer initializer) throws SQLException {
         return statement(query, initializer).executeQuery();
+    }
+
+    public void report(SQLException exception) {
+        plugin.getLogger().log(Level.WARNING, "Unhandled exception: " + exception.getMessage(), exception);
     }
 
     public interface Initializer {

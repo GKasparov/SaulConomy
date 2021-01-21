@@ -1,34 +1,26 @@
 package me.mazenz.saulconomy.commands;
 
-import net.milkbowl.vault.economy.Economy;
+import me.mazenz.saulconomy.vault.SaulVaultEconomy;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Balance implements CommandExecutor {
-    private final Economy e;
 
-    public Balance(Economy e) {
-        this.e = e;
+    private final SaulVaultEconomy economy;
+
+    public Balance(SaulVaultEconomy economy) {
+        this.economy = economy;
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            return true;
+        if (sender instanceof Player) {
+            sender.sendMessage(ChatColor.YELLOW + "Your balance is : $" + economy.getBalance((Player) sender));
+        } else {
+            sender.sendMessage(ChatColor.RED + "This command can only be used by players");
         }
-
-        if (args.length == 0) {
-            return true;
-        }
-
-        Player p = (Player) sender;
-        p.sendMessage("Your old balance is " + e.getBalance(p));
-
-        // Add currentBalance - args[0]
-        // newBalance = currentBalance + currentBalance - args[0]
-        // Which becomes newBalance = args[0]
-        e.depositPlayer(p, e.getBalance(p) - Double.parseDouble(args[0]));
 
         return true;
     }

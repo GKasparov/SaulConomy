@@ -22,7 +22,7 @@ public class SaulVaultEconomy implements BaseVaultImplementation {
 
     @Override
     public boolean isEnabled() {
-        return !db.isClosed();
+        return db.isOpen();
     }
 
     @Override
@@ -62,7 +62,7 @@ public class SaulVaultEconomy implements BaseVaultImplementation {
         })) {
             return resultSet.next();
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            db.report(exception);
         }
 
         return false;
@@ -70,12 +70,16 @@ public class SaulVaultEconomy implements BaseVaultImplementation {
 
     @Override
     public double getBalance(OfflinePlayer player) {
-        try (ResultSet resultSet = db.result("SELECT * FROM economy WHERE uuid = ?", s -> {
+        try (ResultSet resultSet = db.result("SELECT balance FROM economy WHERE uuid = ?", s -> {
             s.setString(1, player.getUniqueId().toString());
         })) {
-            return resultSet.getDouble("balance");
+            if (resultSet.next()) {
+                return resultSet.getDouble(1);
+            } else {
+                return 0;
+            }
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            db.report(exception);
         }
 
         return 0;
@@ -88,34 +92,12 @@ public class SaulVaultEconomy implements BaseVaultImplementation {
 
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer player, double amount) {
-        createPlayerAccount(player);
-
-        try (PreparedStatement statement = db.statement("UPDATE economy SET balance = ? WHERE uuid = ?", s -> {
-            s.setDouble(1, getBalance(player) - amount);
-            s.setString(2, player.getUniqueId().toString());
-        })) {
-            statement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-
-        return null;
+        return setBalance(player, getBalance(player) - amount);
     }
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer player, double amount) {
-        createPlayerAccount(player);
-
-        try (PreparedStatement statement = db.statement("UPDATE economy SET balance = ? WHERE uuid = ?", s -> {
-            s.setDouble(1, getBalance(player) + amount);
-            s.setString(2, player.getUniqueId().toString());
-        })) {
-            statement.executeUpdate();
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-
-        return null;
+        return setBalance(player, getBalance(player) + amount);
     }
 
     @Override
@@ -171,9 +153,28 @@ public class SaulVaultEconomy implements BaseVaultImplementation {
         })) {
             return statement.executeUpdate() > 0;
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            db.report(exception);
         }
 
         return false;
+    }
+
+    public EconomyResponse setBalance(OfflinePlayer player, double balance) {
+        if (balance < 0) {
+            return new EconomyResponse(balance, balance, EconomyResponse.ResponseType.FAILURE, "Negative balance");
+        }
+
+        createPlayerAccount(player);
+
+        try (PreparedStatement statement = db.statement("UPDATE economy SET balance = ? WHERE uuid = ?", s -> {
+            s.setDouble(1, balance);
+            s.setString(2, player.getUniqueId().toString());
+        })) {
+            statement.executeUpdate();
+        } catch (SQLException exception) {
+            db.report(exception);
+        }
+
+        return new EconomyResponse(balance, balance, EconomyResponse.ResponseType.SUCCESS, "");
     }
 }

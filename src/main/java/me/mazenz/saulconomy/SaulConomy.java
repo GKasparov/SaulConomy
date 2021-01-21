@@ -1,6 +1,8 @@
 package me.mazenz.saulconomy;
 
 import me.mazenz.saulconomy.commands.Balance;
+import me.mazenz.saulconomy.commands.Pay;
+import me.mazenz.saulconomy.commands.SetBalance;
 import me.mazenz.saulconomy.vault.SaulVaultEconomy;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -26,6 +28,8 @@ public class SaulConomy extends JavaPlugin {
 
         // Commands
         getCommand("balance").setExecutor(new Balance(economy));
+        getCommand("setbalance").setExecutor(new SetBalance(economy));
+        getCommand("pay").setExecutor(new Pay(economy));
     }
 
     @Override
@@ -33,7 +37,7 @@ public class SaulConomy extends JavaPlugin {
         try {
             db.getConnection().close();
         } catch (SQLException exception) {
-            exception.printStackTrace();
+            db.report(exception);
         }
     }
 }

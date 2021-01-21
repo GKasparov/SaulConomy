@@ -7,8 +7,17 @@ description: Economy Plugin
 commands:
   balance:
     description: Shows user's balance
-    aliases:
-
-
-
-
+    aliases: ['bal']
+  setbalance:
+    description: Set balance
+    aliases: ['setbal', 'setmoney']
+  pay:
+    description: Pay someone
+permissions:
+  saul.*:
+    description: SaulConomy master permissions
+    children:
+      saul.setbalance: true
+    default: op
+  saul.setbalance:
+    description: Allows user to set others' balances
