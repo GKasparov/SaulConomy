@@ -1,5 +1,5 @@
 name: SaulConomy
-version: ${project.version}
+version: 0.1
 main: me.mazenz.saulconomy.SaulConomy
 api-version: 1.16
 authors: [ GKasparov ]
@@ -13,6 +13,9 @@ commands:
     aliases: ['setbal', 'setmoney']
   pay:
     description: Pay someone
+  saul:
+    description: View all SaulConomy commands
+    aliases: ['saulconomy']
 permissions:
   saul.*:
     description: SaulConomy master permissions

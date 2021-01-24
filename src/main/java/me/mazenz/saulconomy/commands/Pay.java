@@ -10,7 +10,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
 
 public class Pay implements CommandExecutor {
 
@@ -61,7 +60,7 @@ public class Pay implements CommandExecutor {
                                 if (amount >= minAmount) {
                                     if (economy.withdrawPlayer(p, amount).type == EconomyResponse.ResponseType.SUCCESS) {
                                         economy.depositPlayer(target, amount);
-                                        p.sendMessage(ChatColor.YELLOW + "Transaction successful");
+                                        p.sendMessage(ChatColor.YELLOW + "You sent $" + amount + " to " + target);
                                     } else {
                                         p.sendMessage(ChatColor.RED + "Unable to process transaction");
                                     }
