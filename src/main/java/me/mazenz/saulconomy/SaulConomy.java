@@ -11,6 +11,7 @@ import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 public class SaulConomy extends JavaPlugin {
 
@@ -19,6 +20,15 @@ public class SaulConomy extends JavaPlugin {
     public void onEnable() {
         getConfig().options().copyDefaults(true);
         saveConfig();
+
+        Logger logger = this.getLogger();
+        new UpdateChecker(this, 88223).getVersion(version -> {
+            if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
+                logger.info("The latest version of SaulConomy is running (0.3)");
+            } else {
+                logger.info("There is a new version of SaulConomy. https://www.spigotmc.org/resources/saulconomy.88223/");
+            }
+        });
 
         this.db = new Database(this);
         this.db.load();

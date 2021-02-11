@@ -1,5 +1,5 @@
 name: SaulConomy
-version: ${project.version}
+version: 0.3
 main: me.mazenz.saulconomy.SaulConomy
 api-version: 1.16
 authors: [ GKasparov ]
