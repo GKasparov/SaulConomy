@@ -29,6 +29,7 @@ As per the instructions on https://github.com/MilkBowl/VaultAPI
 - setBalance EconomyResponse
 - Uses SQLite, more suitable for large-scale servers. (However, if you wish to use MySQL, all you'll need to edit is the DataBase.Java)
 - Pay/ Setbalance Configurations
+- Baltop Command
 
 SaulEconomy does not support "Banks" (Multiple banks for each user). It only supports single User bank accounts. This won't change.
 
