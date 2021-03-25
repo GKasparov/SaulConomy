@@ -15,6 +15,8 @@ commands:
     description: Pay someone
   saul:
     description: Saul Admin commands
+  baltop:
+    description: Balance Leaderboard
 permissions:
   saul.*:
     description: SaulConomy master permissions

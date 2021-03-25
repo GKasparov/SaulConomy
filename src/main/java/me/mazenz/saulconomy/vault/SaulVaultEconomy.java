@@ -4,11 +4,11 @@ import me.mazenz.saulconomy.Database;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.OfflinePlayer;
 
+import java.sql.Array;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class SaulVaultEconomy implements BaseVaultImplementation {
 
@@ -176,5 +176,21 @@ public class SaulVaultEconomy implements BaseVaultImplementation {
         }
 
         return new EconomyResponse(balance, balance, EconomyResponse.ResponseType.SUCCESS, "");
+    }
+
+    public Map<UUID, Double> balTop(int maxResults) {
+        Map<UUID, Double> top = new LinkedHashMap<>();
+
+        try (ResultSet resultSet = db.result("SELECT * FROM economy ORDER BY balance DESC LIMIT ?", s -> {
+            s.setInt(1, maxResults);
+        })) {
+            while (resultSet.next()) {
+                top.put(UUID.fromString(resultSet.getString(1)), resultSet.getDouble(2));
+            }
+        } catch (SQLException exception) {
+            db.report(exception);
+        }
+
+        return top;
     }
 }
