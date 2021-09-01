@@ -4,6 +4,7 @@ Minecraft Economy Plugin.
 # Dependencies
 If you wish to build this yourself, add Vault.jar to your build path (https://www.spigotmc.org/resources/vault.34315/). 
 On Maven projects add the following lines to your pom.xml:
+
 `        <dependency>
             <groupId>com.github.MilkBowl</groupId>
             <artifactId>VaultAPI</artifactId>
@@ -16,6 +17,7 @@ On Maven projects add the following lines to your pom.xml:
         </repository>`
 
 On Gradle Projects, add:
+
 `repositories {
     maven { url 'https://jitpack.io' }
 }
