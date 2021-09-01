@@ -18,38 +18,34 @@ public class SetBalance implements CommandExecutor {
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length == 2) {
-            if (sender instanceof Player) {
-                Player p = (Player) sender;
-
-                if (p.hasPermission("saul.setbalance") || p.hasPermission("saul.*")) {
-                    if (Helper.isDouble(args[1])) {
-                        OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
-                        double bal = Double.parseDouble(args[1]);
-                        economy.setBalance(target, bal);
-                        String name = target.getName();
-                        p.sendMessage(ChatColor.YELLOW + "You have set " + name + "'s balance to $" + bal);
-                    } else {
-                        p.sendMessage(ChatColor.RED + "The number you gave is not valid");
-                    }
-                } else {
-                    p.sendMessage(ChatColor.RED + "Insufficient Permissions");
-
-                }
-                return true;
-            }
-
-            if (Helper.isDouble(args[1])) {
-                OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
-                String name = target.getName();
-                double bal = Double.parseDouble(args[1]);
-                economy.setBalance(target, bal);
-                sender.sendMessage(ChatColor.YELLOW + "You have set " + name + "'s balance to $" + bal);
-            }
-        } else {
+        if (!(args.length == 2)) {
             sender.sendMessage(ChatColor.RED + "Incorrect Syntax: /setbal <player> <amount>");
-
         }
+
+        if (!Helper.isDouble(args[1])) {
+            sender.sendMessage(ChatColor.RED
+                    + "The number you gave is not valid");
+            return true;
+        }
+
+        if (sender instanceof Player && !sender.hasPermission("saul.setbalance") && !sender.hasPermission("saul.*")) {
+            sender.sendMessage(ChatColor.RED +
+                    "Insufficient Permissions");
+            return true;
+        }
+
+        OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
+        double bal = Double.parseDouble(args[1]);
+        economy.setBalance(target, bal);
+        String name = target.getName();
+        sender.sendMessage(ChatColor.YELLOW
+                + "You have set "
+                + name
+                + "'s balance to $"
+                + bal);
+
         return true;
     }
+
 }
+

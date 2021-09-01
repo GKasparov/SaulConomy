@@ -17,9 +17,13 @@ public class Balance implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (sender instanceof Player) {
-            sender.sendMessage(ChatColor.YELLOW + "Your balance is : $" + economy.getBalance((Player) sender));
+            sender.sendMessage(ChatColor.YELLOW
+                    + "Your balance is : $"
+                    + economy.getBalance((Player)
+                    sender));
         } else {
-            sender.sendMessage(ChatColor.RED + "This command can only be used by players");
+            sender.sendMessage(ChatColor.RED
+                    + "This command can only be used by players");
         }
 
         return true;
