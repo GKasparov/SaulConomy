@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class Pay implements CommandExecutor {
 
@@ -21,65 +22,66 @@ public class Pay implements CommandExecutor {
         this.plugin = plugin;
     }
 
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length == 2) {
-            if (sender instanceof Player) {
-                if (plugin.getConfig().getBoolean("offlinePayments")) {
-                    Player p = (Player) sender;
-                    OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
-                    double minAmount = plugin.getConfig().getDouble("minimumPay");
 
-                    if (Helper.isDouble(args[1])) {
-                        double amount = Double.parseDouble(args[1]);
-                        if (economy.has(p, amount)) {
-                            if (amount >= minAmount) {
-                                if (economy.withdrawPlayer(p, amount).type == EconomyResponse.ResponseType.SUCCESS) {
-                                    economy.depositPlayer(target, amount);
-                                    p.sendMessage("Transaction successful");
-                                } else {
-                                    p.sendMessage(ChatColor.RED + "Unable to process transaction");
-                                }
-                            } else {
-                                p.sendMessage(ChatColor.RED + "The amount you provided is invalid. The amount must be at least $" + minAmount);
-                            }
-                        } else {
-                            p.sendMessage(ChatColor.RED + "Insufficient funds for this transaction");
-                        }
-                    } else {
-                        p.sendMessage(ChatColor.RED + "The number you provided is invalid");
-                    }
-                } else {
-                    if (Bukkit.getPlayer(args[0]) != null) {
-                        Player p = (Player) sender;
-                        Player target = Bukkit.getPlayer(args[0]);
-                        double minAmount = plugin.getConfig().getDouble("minimumPay");
+            double minAmount = plugin.getConfig().getDouble("minimumPay");
 
-                        if (Helper.isDouble(args[1])) {
-                            double amount = Double.parseDouble(args[1]);
-                            if (economy.has(p, amount)) {
-                                if (amount >= minAmount) {
-                                    if (economy.withdrawPlayer(p, amount).type == EconomyResponse.ResponseType.SUCCESS) {
-                                        economy.depositPlayer(target, amount);
-                                        p.sendMessage(ChatColor.YELLOW + "You sent $" + amount + " to " + target);
-                                    } else {
-                                        p.sendMessage(ChatColor.RED + "Unable to process transaction");
-                                    }
-                                } else {
-                                    p.sendMessage(ChatColor.RED + "The amount you provided is invalid. The amount must be at least $" + minAmount);
-                                }
-                            } else {
-                                p.sendMessage(ChatColor.RED + "Insufficient funds for this transaction");
-                            }
-                        } else {
-                            p.sendMessage(ChatColor.RED + "The number you provided is invalid");
-                        }
-                    } else {
-                        sender.sendMessage(ChatColor.RED + "The player you provided does not exist or is not currently online");
-                    }
-                }
-            } else {
-                sender.sendMessage(ChatColor.RED + "This command can only be run in-game");
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED
+                        + "This command can only be run in-game");
+                return true;
             }
+
+            Player p = (Player) sender;
+
+            if (!Helper.isDouble(args[1])) {
+                p.sendMessage(ChatColor.RED + "The number you provided is invalid");
+                return true;
+            }
+
+            double amount = Double.parseDouble(args[1]);
+
+            if (!economy.has(p, amount)) {
+                p.sendMessage(ChatColor.RED + "Insufficient funds for this transaction");
+                return true;
+            }
+
+            if (amount < minAmount) {
+                p.sendMessage(ChatColor.RED
+                        + "The amount you provided is invalid. The amount must be at least $"
+                        + minAmount);
+                return true;
+            }
+
+            if (economy.withdrawPlayer(p, amount).type != EconomyResponse.ResponseType.SUCCESS) {
+                p.sendMessage(ChatColor.RED + "Unable to process transaction");
+                return true;
+            }
+
+            economy.withdrawPlayer(p, amount);
+            p.sendMessage("Transaction successful");
+
+            if (plugin.getConfig().getBoolean("offlinePayments")) {
+
+                OfflinePlayer target = Bukkit.getOfflinePlayer(args[0]);
+
+                economy.depositPlayer(target, amount);
+
+                p.sendMessage(ChatColor.YELLOW + "You sent $" + amount + " to " + target);
+                return true;
+            }
+            if (!(Bukkit.getPlayer(args[2]) instanceof Player)) {
+                p.sendMessage(ChatColor.RED
+                        + "That player that you specified does not exist or is not online");
+                return true;
+            }
+            Player target = Bukkit.getPlayer(args[0]);
+
+            economy.depositPlayer(target, amount);
+            p.sendMessage(ChatColor.YELLOW + "You sent $" + amount + " to " + target);
+
+            return true;
         }
 
         return true;
