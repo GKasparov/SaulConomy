@@ -19,7 +19,8 @@ public class SetBalance implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(args.length == 2)) {
-            sender.sendMessage(ChatColor.RED + "Incorrect Syntax: /setbal <player> <amount>");
+            sender.sendMessage(ChatColor.RED
+                    + "Incorrect Syntax: /setbal <player> <amount>");
         }
 
         if (!Helper.isDouble(args[1])) {
@@ -46,6 +47,5 @@ public class SetBalance implements CommandExecutor {
 
         return true;
     }
-
 }
 
