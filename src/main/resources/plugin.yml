@@ -1,7 +1,7 @@
 name: SaulConomy
-version: 0.3
+version: 0.4
 main: me.mazenz.saulconomy.SaulConomy
-api-version: 1.16
+api-version: 1.17
 authors: [ GKasparov ]
 description: Economy Plugin
 commands:

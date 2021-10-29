@@ -9,6 +9,8 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class Saul implements CommandExecutor {
 
     private final SaulConomy plugin;
@@ -27,7 +29,7 @@ public class Saul implements CommandExecutor {
                 
                 return true;
             }
-            if (!(sender instanceof Player && sender instanceof ConsoleCommandSender)) {
+            if (!(sender instanceof Player p && sender instanceof ConsoleCommandSender)) {
 
                 plugin.reloadConfig();
                 sender.sendMessage(ChatColor.RED + "[SaulConomy] Reloaded Configurations");
@@ -35,13 +37,13 @@ public class Saul implements CommandExecutor {
                 return true;
             }
 
-            Player p = (Player) sender;
-
             if (!p.hasPermission("saul.reload")) {
-
-                p.sendMessage(ChatColor.RED + "Insufficient Permissions");
-                
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin
+                                .getConfig()
+                                .getString("noPermission"))
+                        .replace("%name%", p.getName())));
                 return true;
+
             }
 
             plugin.reloadConfig();

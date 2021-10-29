@@ -35,8 +35,8 @@ public class SaulConomy extends JavaPlugin {
         Bukkit.getServicesManager().register(Economy.class, economy, this, ServicePriority.Normal);
 
         // Commands
-        getCommand("balance").setExecutor(new Balance(economy));
-        getCommand("setbalance").setExecutor(new SetBalance(economy));
+        getCommand("balance").setExecutor(new Balance(economy, this));
+        getCommand("setbalance").setExecutor(new SetBalance(economy, this));
         getCommand("pay").setExecutor(new Pay(economy, this));
         getCommand("saul").setExecutor(new Saul(this));
         getCommand("baltop").setExecutor(new Baltop(economy, this));

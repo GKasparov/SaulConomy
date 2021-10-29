@@ -36,14 +36,20 @@ public class Pay implements CommandExecutor {
             Player p = (Player) sender;
 
             if (!Helper.isDouble(args[1])) {
-                p.sendMessage(ChatColor.RED + "The number you provided is invalid");
+                p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin
+                        .getConfig().
+                        getString("notANumber")
+                        .replace("%name%", p.getName())));
                 return true;
             }
 
             double amount = Double.parseDouble(args[1]);
 
             if (!economy.has(p, amount)) {
-                p.sendMessage(ChatColor.RED + "Insufficient funds for this transaction");
+                p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin
+                        .getConfig()
+                        .getString("insufficientFundsMessage")
+                        .replace("%player%", p.getName())));
                 return true;
             }
 
@@ -60,7 +66,6 @@ public class Pay implements CommandExecutor {
             }
 
             economy.withdrawPlayer(p, amount);
-            p.sendMessage("Transaction successful");
 
             if (plugin.getConfig().getBoolean("offlinePayments")) {
 
@@ -68,7 +73,13 @@ public class Pay implements CommandExecutor {
 
                 economy.depositPlayer(target, amount);
 
-                p.sendMessage(ChatColor.YELLOW + "You sent $" + amount + " to " + target);
+                p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.
+                        getConfig()
+                        .getString("payMessage")
+                        .replace("%targetPlayer", target.getName())
+                        .replace("%name%", p.getName())
+                        .replace("%amount%", String.valueOf(amount))));
+
                 return true;
             }
             if (!(Bukkit.getPlayer(args[2]) instanceof Player)) {
@@ -79,7 +90,12 @@ public class Pay implements CommandExecutor {
             Player target = Bukkit.getPlayer(args[0]);
 
             economy.depositPlayer(target, amount);
-            p.sendMessage(ChatColor.YELLOW + "You sent $" + amount + " to " + target);
+            p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.
+                    getConfig()
+                    .getString("payMessage")
+                    .replace("%targetPlayer%", target.getName())
+                    .replace("%name%", p.getName())
+                    .replace("%amount%", String.valueOf(amount))));
 
             return true;
         }

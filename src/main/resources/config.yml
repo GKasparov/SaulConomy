@@ -1,3 +1,12 @@
 minimumPay: 0.01 #minimumPay is the lowest amount user's can pay others with the /pay command
 offlinePayments: true #Dictates whether players can pay others that are offline with the /pay command
 maxBaltop: 5 #Amount of people you want to show up on Baltop
+
+# Messages
+# You can use the following Placeholders: %amount% -- %targetPlayer% -- %name%
+# Also, you can use standard Minecraft colour codes; E.G &b, &c etc
+payMessage: "&rYou have sent &a$%amount% &rto &a%targetPlayer%"
+insufficientFundsMessage: "&cInsufficient funds for this transaction"
+noPermission: "&cInsufficient Permissions"
+notANumber: "&cThe number you provided is not a valid number"
+balMessage: "&rYour balance is &a$%amount%"
