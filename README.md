@@ -18,12 +18,12 @@ On Maven projects add the following lines to your pom.xml:
 
 On Gradle Projects, add:
 
-`repositories {
+```repositories {
     maven { url 'https://jitpack.io' }
 }
 dependencies {
     compileOnly "com.github.MilkBowl:VaultAPI:1.7"
-}`
+}```
 
 As per the instructions on https://github.com/MilkBowl/VaultAPI
 
