@@ -19,7 +19,7 @@ On Maven projects add the following lines to your pom.xml:
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-    </repositories
+    </repositories>
 ```
 
 On Gradle Projects, add:
