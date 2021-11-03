@@ -1,9 +1,10 @@
 name: SaulConomy
-version: 0.4
+version: 0.5
 main: me.mazenz.saulconomy.SaulConomy
 api-version: 1.17
 authors: [ GKasparov ]
 description: Economy Plugin
+depend: [Vault]
 commands:
   balance:
     description: Shows user's balance
@@ -17,6 +18,7 @@ commands:
     description: Saul Admin commands
   baltop:
     description: Balance Leaderboard
+    aliases: ['topmoney', 'balancetop']
 permissions:
   saul.*:
     description: SaulConomy master permissions

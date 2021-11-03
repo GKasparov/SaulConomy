@@ -2,11 +2,27 @@ minimumPay: 0.01 #minimumPay is the lowest amount user's can pay others with the
 offlinePayments: true #Dictates whether players can pay others that are offline with the /pay command
 maxBaltop: 5 #Amount of people you want to show up on Baltop
 
-# Messages
-# You can use the following Placeholders: %amount% -- %targetPlayer% -- %name%
-# Also, you can use standard Minecraft colour codes; E.G &b, &c etc
-payMessage: "&rYou have sent &a$%amount% &rto &a%targetPlayer%"
-insufficientFundsMessage: "&cInsufficient funds for this transaction"
-noPermission: "&cInsufficient Permissions"
-notANumber: "&cThe number you provided is not a valid number"
-balMessage: "&rYour balance is &a$%amount%"
+# messages
+# you can use standard Minecraft colour codes; E.G &b, &c etc
+# the placeholders available:
+# %name% : The username of the player executing the command
+# %targetPlayer% : The name of the player the command is taking effect on, derived from the command's input arguments
+# %amount% : Numeric amount of the output of the command. This may be a player's balance in /bal or else
+# %inputNumber% : The number a player inputs in a command. For example the input of setting a player's balance
+
+payMessage: "&rYou have sent &a$%amount% &rto &a%targetPlayer%" #Message shown when sending currency to another player
+                                                                # VALID PLACEHOLDERS: %amount% -- %targetPlayer% -- %inputNumber% -- %name%
+insufficientFundsMessage: "&cInsufficient funds for this transaction" #Message shown when the player is missing the required funds
+                                                                # VALID PLACEHOLDERS: %name%
+noPermission: "&cInsufficient Permissions" #Message shown when a player does not have the required permission node to execute a command
+                                                                # VALID PLACEHOLDERS: %name%
+notANumber: "&cThe number you provided is not a valid number" #Message shown when a player enters an invalid double
+                                                              # VALID PLACEHOLDERS: %name% -- %inputNumber%
+balMessage: "&rYour balance is &a$%amount%" #Format of /bal | /balance command
+                                                              # VALID PLACEHOLDERS: %name% -- $amount%
+onlyInGameMessage: "&cThis command is only to be used in game" #Message shown when an in-game only command is executed from console
+                                                              # NO VALID PLACEHOLDERS
+invalidCommand: "&cInvalid Command. Did you mean " #Message for an invalid command
+                                                              # VALID PLACEHOLDERS: %name%
+setBalMessage: "&rYou have set the balance of &a%targetPlayer%&r to &a$%inputNumber%" #Message shown when setting a player's balance
+                                                              # VALID PLACEHOLDERS: %targetPlayer% -- %name% -- %inputNumber%

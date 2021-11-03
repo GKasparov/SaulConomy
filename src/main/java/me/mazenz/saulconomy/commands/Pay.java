@@ -12,6 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Objects;
+
 public class Pay implements CommandExecutor {
 
     private final SaulVaultEconomy economy;
@@ -23,32 +25,41 @@ public class Pay implements CommandExecutor {
     }
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if (args.length == 2) {
+           if (args.length != 2) {
+
+               sender.sendMessage(ChatColor.RED + "Invalid Syntax: /pay <player> <amount>");
+
+               return true; }
 
             double minAmount = plugin.getConfig().getDouble("minimumPay");
 
             if (!(sender instanceof Player)) {
-                sender.sendMessage(ChatColor.RED
-                        + "This command can only be run in-game");
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects
+                        .requireNonNull(plugin
+                                .getConfig()
+                                .getString("onlyInGameMessage"))
+                ));
                 return true;
             }
 
             Player p = (Player) sender;
 
             if (!Helper.isDouble(args[1])) {
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin
-                        .getConfig().
-                        getString("notANumber")
-                        .replace("%name%", p.getName())));
+                p.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects
+                        .requireNonNull(plugin
+                                .getConfig()
+                                .getString("notANumber"))
+                        .replace("%name%", p.getName())
+                        .replace("%inputNumber%", args[1])));
                 return true;
             }
 
             double amount = Double.parseDouble(args[1]);
 
             if (!economy.has(p, amount)) {
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin
-                        .getConfig()
-                        .getString("insufficientFundsMessage")
+                p.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin
+                                .getConfig()
+                                .getString("insufficientFundsMessage"))
                         .replace("%player%", p.getName())));
                 return true;
             }
@@ -73,10 +84,10 @@ public class Pay implements CommandExecutor {
 
                 economy.depositPlayer(target, amount);
 
-                p.sendMessage(ChatColor.translateAlternateColorCodes('&', plugin.
-                        getConfig()
-                        .getString("payMessage")
-                        .replace("%targetPlayer", target.getName())
+                p.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.
+                                getConfig()
+                                .getString("payMessage"))
+                        .replace("%targetPlayer%", target.getName())
                         .replace("%name%", p.getName())
                         .replace("%amount%", String.valueOf(amount))));
 
@@ -98,8 +109,5 @@ public class Pay implements CommandExecutor {
                     .replace("%amount%", String.valueOf(amount))));
 
             return true;
-        }
-
-        return true;
     }
 }

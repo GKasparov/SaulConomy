@@ -25,8 +25,16 @@ public class Saul implements CommandExecutor {
 
             if (!args[0].equalsIgnoreCase("reload")) {
 
-                sender.sendMessage(ChatColor.RED + "Invalid command. Did you mean /saul reload");
-                
+                String preOutput = plugin.getConfig().getString("invalidCommand") + "/saul reload";
+
+                if (sender instanceof Player) {
+                    preOutput = preOutput.replace("%name%", sender.getName());
+                } else {
+                    preOutput = preOutput.replace("%name%", "console");
+                }
+
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', preOutput));
+
                 return true;
             }
             if (!(sender instanceof Player p && sender instanceof ConsoleCommandSender)) {
@@ -56,6 +64,7 @@ public class Saul implements CommandExecutor {
         sender.sendMessage(ChatColor.YELLOW + "/saul : Check available SaulConomy commands [Aliases]: /saulconomy");
         sender.sendMessage(ChatColor.YELLOW + "/pay : Send  money to other players");
         sender.sendMessage(ChatColor.YELLOW + "/bal : Check your account balance [Aliases]: /balance");
+        sender.sendMessage(ChatColor.YELLOW + "/baltop : Look at the top " + plugin.getConfig().getInt("maxBaltop") + " wealthy players [Aliases]: /topmoney, /balancetop");
         sender.sendMessage(ChatColor.YELLOW + "/setbal : Set a user's balance [Aliases]: /setbalance, /setmoney");
 
         return true;

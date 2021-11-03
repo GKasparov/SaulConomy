@@ -21,15 +21,18 @@ public class Baltop implements CommandExecutor {
     }
 
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        sender.sendMessage(ChatColor.RED + "----- Balance Top -----");
+        sender.sendMessage(ChatColor.GREEN + "----- Balance Top -----");
 
         int i = 0;
 
-        for (Map.Entry<UUID, Double> entry : economy.balTop(plugin.getConfig().getInt("maxBaltop")).entrySet()) {
+        for (Map.Entry<UUID, Double> entry : economy.balTop(plugin
+                .getConfig()
+                .getInt("maxBaltop"))
+                .entrySet()) {
             i++;
             UUID uuid = entry.getKey();
             Double balance = entry.getValue();
-            sender.sendMessage(ChatColor.YELLOW + "" +  i + ". " + ChatColor.GREEN + sender.getServer().getOfflinePlayer(uuid).getName() + " - $" + balance);
+            sender.sendMessage(ChatColor.WHITE + "" +  i + ". " + ChatColor.YELLOW + sender.getServer().getOfflinePlayer(uuid).getName() + " - $" + balance);
         }
 
         return true;

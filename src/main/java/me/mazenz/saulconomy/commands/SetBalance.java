@@ -49,12 +49,12 @@ public class SetBalance implements CommandExecutor {
         double bal = Double.parseDouble(args[1]);
         economy.setBalance(target, bal);
         String name = target.getName();
-        sender.sendMessage(ChatColor.YELLOW
-                + "You have set "
-                + name
-                + "'s balance to $"
-                + bal);
-
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects
+                .requireNonNull(plugin
+                        .getConfig()
+                        .getString("setBalMessage"))
+                .replace("%targetPlayer%", name)
+                .replace("%inputNumber%", String.valueOf(bal))));
         return true;
     }
 }

@@ -23,12 +23,19 @@ public class Balance implements CommandExecutor {
 
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED
-                    + "This command can only be used by players");
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects
+                    .requireNonNull(plugin
+                            .getConfig()
+                            .getString("onlyInGameMessage"))
+            ));
+
             return true;
         }
         double bal = economy.getBalance((Player) sender);
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(plugin.getConfig().getString("balMessage"))
+        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects
+                .requireNonNull(plugin
+                        .getConfig()
+                        .getString("balMessage"))
                 .replace("%name%", sender.getName())
                 .replace("%amount%", String.valueOf(bal))));
 
