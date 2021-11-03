@@ -30,21 +30,16 @@ public class Baltop implements CommandExecutor {
             pageToShow = 1;
         } else {
             try {
-
                 pageToShow = Integer.parseInt(args[0]);
 
             } catch (NumberFormatException e) {
-
                 String preOutput = plugin.getConfig().getString("notANumber");
 
                 if (!(sender instanceof Player)) {
-
                     preOutput = preOutput.replace("%name%", "console");
                 } else {
-
                     preOutput = preOutput.replace("%name%", sender.getName());
                 }
-
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', preOutput));
 
                 return true;

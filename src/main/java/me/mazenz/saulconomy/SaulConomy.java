@@ -20,8 +20,9 @@ public class SaulConomy extends JavaPlugin {
 
         Logger logger = this.getLogger();
         new UpdateChecker(this, 88223).getVersion(version -> {
+            logger.info("Checking for Updates...");
             if (this.getDescription().getVersion().equalsIgnoreCase(version)) {
-                logger.info("The latest version of SaulConomy is running (0.3)");
+                logger.info("No new version available");
             } else {
                 logger.info("There is a new version of SaulConomy. https://www.spigotmc.org/resources/saulconomy.88223/");
             }
