@@ -26,3 +26,4 @@ invalidCommand: "&cInvalid Command. Did you mean " #Message for an invalid comma
                                                               # VALID PLACEHOLDERS: %name%
 setBalMessage: "&rYou have set the balance of &a%targetPlayer%&r to &a$%inputNumber%" #Message shown when setting a player's balance
                                                               # VALID PLACEHOLDERS: %targetPlayer% -- %name% -- %inputNumber%
+pageAmount: 5 # Amount of entries to show on each page of Baltop

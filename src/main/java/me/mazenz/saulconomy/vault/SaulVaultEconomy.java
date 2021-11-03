@@ -178,11 +178,10 @@ public class SaulVaultEconomy implements BaseVaultImplementation {
         return new EconomyResponse(balance, balance, EconomyResponse.ResponseType.SUCCESS, "");
     }
 
-    public Map<UUID, Double> balTop(int maxResults) {
+    public Map<UUID, Double> balTop() {
         Map<UUID, Double> top = new LinkedHashMap<>();
 
-        try (ResultSet resultSet = db.result("SELECT * FROM economy ORDER BY balance DESC LIMIT ?", s -> {
-            s.setInt(1, maxResults);
+        try (ResultSet resultSet = db.result("SELECT * FROM economy ORDER BY balance DESC", s -> {
         })) {
             while (resultSet.next()) {
                 top.put(UUID.fromString(resultSet.getString(1)), resultSet.getDouble(2));
