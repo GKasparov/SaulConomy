@@ -1,5 +1,6 @@
 # SaulEconomy
 Minecraft Economy Plugin.
+Spigot Page: https://www.spigotmc.org/resources/saulconomy.88223/
 
 # Dependencies
 If you wish to build this yourself, add Vault.jar to your build path (https://www.spigotmc.org/resources/vault.34315/). 
